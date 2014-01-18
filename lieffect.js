@@ -2,11 +2,18 @@
 
     $.fn.lieffect = function (options) {
 
+        if (typeof options == 'function')
+            options = { callback: options }
+
         var settings = this.data('lieffect') || $.extend({}, {
             item: '.cell',
             container: $(this),
             speed: 200,
-            easing: 'linear'
+            easing: 'linear',
+            callback: {
+                hide: '',
+                show: ''
+            }
         }, options)
         if (!settings.initialized) {
             this.data('lieffect', settings)
@@ -27,6 +34,10 @@
                         } else {
                             settings.hidden = true
                             settings.animated = false
+                            if (typeof settings.callback.hide == 'function')
+                                settings.callback.hide()
+                            if (typeof settings.callback == 'function')
+                                settings.callback()
                         }
                     })
                     return this;
@@ -47,6 +58,10 @@
                         } else {
                             settings.hidden = false
                             settings.animated = false
+                            if (typeof settings.callback.show == 'function')
+                                settings.callback.show()
+                            if (typeof settings.callback == 'function')
+                                settings.callback()
                         }
                     }
 
